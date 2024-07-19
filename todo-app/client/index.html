@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TODO App</title>
+</head>
+<body>
+  <h1>TODO List</h1>
+  <div id="todo-list"></div>
+  <input type="text" id="new-todo" placeholder="New TODO">
+  <button onclick="addTodo()">Add TODO</button>
+
+  <script>
+    const apiBaseUrl = 'http://localhost:3000/api/todos';
+
+    async function fetchTodos() {
+      const response = await fetch(apiBaseUrl);
+      const todos = await response.json();
+      const todoList = document.getElementById('todo-list');
+      todoList.innerHTML = '';
+      todos.forEach(todo => {
+        const todoItem = document.createElement('div');
+        todoItem.innerHTML = `
+          <input type="checkbox" ${todo.completed ? 'checked' : ''} onchange="toggleTodo('${todo._id}')">
+          <span>${todo.title}</span>
+          <button onclick="deleteTodo('${todo._id}')">Delete</button>
+        `;
+        todoList.appendChild(todoItem);
+      });
+    }
+
+    async function addTodo() {
+      const newTodoInput = document.getElementById('new-todo');
+      const newTodo = {
+        title: newTodoInput.value,
+        completed: false
+      };
+      await fetch(apiBaseUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newTodo)
+      });
+      newTodoInput.value = '';
+      fetchTodos();
+    }
+
+    async function toggleTodo(id) {
+      const todoResponse = await fetch(`${apiBaseUrl}/${id}`);
+      const todo = await todoResponse.json();
+      await fetch(`${apiBaseUrl}/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title: todo.title,
+          completed: !todo.completed
+        })
+      });
+      fetchTodos();
+    }
+
+    async function deleteTodo(id) {
+      await fetch(`${apiBaseUrl}/${id}`, {
+        method: 'DELETE'
+      });
+      fetchTodos();
+    }
+
+    fetchTodos();
+  </script>
+</body>
+</html>

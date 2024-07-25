@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Голосування за найкращий смайлик</title>
+    <style>
+        .emoji {
+            font-size: 2em;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .results {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Голосування за найкращий смайлик</h1>
+    <div id="emojis">
+        <span class="emoji" data-id="emoji1">😀</span> <span id="count1">0</span>
+        <span class="emoji" data-id="emoji2">😊</span> <span id="count2">0</span>
+        <span class="emoji" data-id="emoji3">😎</span> <span id="count3">0</span>
+        <span class="emoji" data-id="emoji4">😍</span> <span id="count4">0</span>
+        <span class="emoji" data-id="emoji5">😘</span> <span id="count5">0</span>
+    </div>
+    <button id="showResults">Show Results</button>
+    <button id="clearResults">Очистити результати</button>
+    <div class="results">
+        <h2>Результати голосування:</h2>
+        <p>Переможець: <span id="winner"></span></p>
+        <p>Кількість голосів: <span id="winnerVotes"></span></p>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
